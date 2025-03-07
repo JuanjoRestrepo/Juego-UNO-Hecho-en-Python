@@ -32,8 +32,8 @@ class Card:
 class Deck:
     """
     Crea el mazo de cartas UNO.
-    - Se agregan cartas numéricas y especiales según listas definidas.
-    - Se agregan comodines con color "negro".
+    - Se agregan cartas numéricas y de acción según las listas definidas.
+    - Se agregan comodines (color "negro").
     Luego se asignan las imágenes a cada carta de forma cíclica usando las imágenes cargadas de la carpeta.
     """
     def __init__(self, folderImages):
@@ -59,7 +59,8 @@ class Deck:
         for i, card in enumerate(self.cards):
             filename, photo = folderImages[i % numImages]
             card.image = photo
-            card.name = filename
+            # Se elimina la extensión usando os.path.splitext
+            card.name = os.path.splitext(filename)[0]
 
     def shuffleDeck(self):
         random.shuffle(self.cards)
@@ -106,10 +107,10 @@ def game(root):
         etiqueta = tk.Label(root, text=str(firstCard), font=("Arial", 24))
     etiqueta.pack(pady=20, padx=20)
     
-    # Al hacer clic sobre la imagen, se imprime el nombre de la carta en la terminal
+    # Vinculamos el clic sobre la imagen para imprimir el nombre (sin extensión) de la carta en la terminal
     etiqueta.bind("<Button-1>", lambda event: print(f"Card clicked: {firstCard.name}"))
     
-    # Asignamos el mazo al juego (por si se usa más adelante)
+    # Asignamos el mazo al juego (para futuras interacciones)
     game_instance = UNOGame(root)
     game_instance.deck = deck
     
